@@ -67,8 +67,10 @@
     <Compile Include="Assets\scripts\csvLoader.cs" />
     <Compile Include="Assets\scripts\MusicData.cs" />
     <Compile Include="Assets\scripts\MusicLoader.cs" />
+    <Compile Include="Assets\scripts\MusicManager.cs" />
     <Compile Include="Assets\scripts\MusicWheel.cs" />
     <Compile Include="Assets\scripts\MusicWheelItem.cs" />
+    <Compile Include="Assets\scripts\ProgressIcon.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>E:/SJTU备份箱/游戏设计/Nijigen Music Master/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
@@ -293,6 +295,9 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>E:/SJTU备份箱/游戏设计/Nijigen Music Master/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio">
+      <HintPath>E:/SJTU备份箱/游戏设计/Nijigen Music Master/Assets/Plugins/NAudio.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:/Programs/unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

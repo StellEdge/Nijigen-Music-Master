@@ -19,10 +19,10 @@ public class MusicData{
 }
 
 public class MusicFolder{
-	public ArrayList musicdata;
+	public List<MusicData> musicdata;
 	public int Length;
 	public string Name;
 	public MusicFolder(){
-		musicdata = new ArrayList();
+		musicdata = new List<MusicData>();
 	}
 }
