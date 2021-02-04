@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System.Threading;
 
-public class MusicLoader : MonoBehaviour
+
+//Sub module of Music manager
+public static class MusicLoader
 {
-	public string MUSICPATH = "E:/SJTU备份箱/游戏设计/MusicData/";
-	private DirectoryInfo musicdir;
-	private List<MusicFolder> musicfolders;
-	// Start is called before the first frame update
-	void Start()
+	private static string MUSICPATH = MusicDataPath.MUSICPATH;
+	private static DirectoryInfo musicdir;
+	private static List<MusicFolder> musicfolders;
+	private const string cLocalPath = "file:///";
+	//build audio list:
+	private static Dictionary<string, AudioClip> audioDic = new Dictionary<string, AudioClip>();
+	private static object audioDic_lock = new object();
+
+	public static void InitMusicLoader()
 	{
 		musicfolders = new List<MusicFolder>();
 		MusicFolder temp_musicfolder = new MusicFolder();
@@ -43,8 +50,53 @@ public class MusicLoader : MonoBehaviour
 				}
 			}
 		}
+
+		//csv load complete
+		UpdateMusicList(musicfolders);
+
+
 	}
-	public List<MusicFolder> MusicDirFilter(List<MusicFolder> mfolders,string[] fltr)
+
+	public static void UpdateMusicList(List<MusicFolder> mfolders)
+	{
+		//Get music folders from MusicLoader
+		List<Thread> threads = new List<Thread>();
+		Thread t;
+		foreach (MusicFolder mf in mfolders)
+		{
+            t = new Thread(ReadAndLoadMusicFolder);
+			t.Start(mf);
+		}
+	}
+
+	private static void ReadAndLoadMusicFolder(object obj)
+	{
+		MusicFolder mf = obj as MusicFolder;
+		Debug.Log("Start loading "+mf.Name);
+		foreach (MusicData md in mf.musicdata)
+		{
+			string musicfilepath = cLocalPath + MUSICPATH + md.music;
+
+			//Read Here:
+			WWW www = new WWW(" ");
+			while (!www.isDone)
+			{
+			}
+
+			//Convert Music to AudioClip 
+			AudioClip ac = NAudioPlayer.FromMp3Data(www.bytes);	 
+			
+			ac.name = md.title;
+			lock (audioDic_lock)
+			{
+				audioDic.Add(ac.name, ac);
+				Debug.Log("Add Music:"+ ac.name);
+			}
+		}
+		return;
+	}
+
+	public static List<MusicFolder> MusicDirFilter(List<MusicFolder> mfolders,string[] fltr)
     {
 		if (fltr.Length == 0) return mfolders;
 		//lazy code
@@ -59,7 +111,7 @@ public class MusicLoader : MonoBehaviour
 		return mfolders;
     }
 
-	public long GetMusicDirLength(){
+	public static long GetMusicDirLength(){
 		if (musicdir.Exists)
 			return 0;
 		long len = 0;
@@ -68,10 +120,5 @@ public class MusicLoader : MonoBehaviour
 			len++;
 		}
 		return len;
-	}
-	// Update is called once per frame
-	void Update()
-	{
-
 	}
 }

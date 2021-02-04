@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class MusicDataPath
+{
+	public static string MUSICPATH = "E:/SJTU备份箱/游戏设计/MusicData/";
+}
 public class MusicData{
 	public int NO;
 	public string title,subtitle,artist,translated,animation,music,image;
