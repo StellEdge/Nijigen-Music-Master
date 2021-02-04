@@ -14,7 +14,8 @@ public static class MusicLoader
 	private const string cLocalPath = "file:///";
 	//build audio list:
 	private static Dictionary<string, AudioClip> audioDic = new Dictionary<string, AudioClip>();
-	private static object audioDic_lock = new object();
+	private static Dictionary<string, byte[]> audioWavDic = new Dictionary<string, byte[]>();
+	private static object audioWavDic_lock = new object();
 
 	public static void InitMusicLoader()
 	{
@@ -76,21 +77,18 @@ public static class MusicLoader
 		foreach (MusicData md in mf.musicdata)
 		{
 			string musicfilepath = cLocalPath + MUSICPATH + md.music;
+			byte[] musicbytes= {1,2 };
 
-			//Read Here:
-			WWW www = new WWW(" ");
-			while (!www.isDone)
-			{
-			}
+			//Read musicbytes Here:
+			//TODO:
 
-			//Convert Music to AudioClip 
-			AudioClip ac = NAudioPlayer.FromMp3Data(www.bytes);	 
-			
-			ac.name = md.title;
-			lock (audioDic_lock)
+			//Convert Music to AudioClip Can only be deployed in the main thread.
+			//So audioWavDic act as buffer
+
+			lock (audioWavDic_lock)
 			{
-				audioDic.Add(ac.name, ac);
-				Debug.Log("Add Music:"+ ac.name);
+				audioWavDic.Add(md.title, musicbytes);
+				Debug.Log("Add Music:"+ md.title);
 			}
 		}
 		return;
