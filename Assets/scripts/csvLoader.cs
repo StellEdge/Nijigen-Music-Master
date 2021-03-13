@@ -29,7 +29,7 @@ public class csvController  {
 		try
 		{
 			string file_url = path + "//" + fileName;    //根据路径打开文件
-			sr = File.OpenText(file_url);
+			sr =File.OpenText(file_url);// new StreamReader(file_url, System.Text.Encoding.Unicode); 
 			Debug.Log("File Find in " + file_url);
 		}
 		catch

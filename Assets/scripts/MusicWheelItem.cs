@@ -1,19 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using System.IO;
 public class MusicWheelItem : MonoBehaviour
 {
     private GameObject wheelObject; //self
-    private GameObject text_title,text_artist,text_animation,text_translated;
-    private TextMesh text_title_tm, text_artist_tm, text_animation_tm, text_translated_tm;
-
-    private string _title, _artist, _animation, _translated;
-    bool update_request;
+    public GameObject text_title,text_artist,text_animation,text_translated, button_obj,image_obj,side_image_obj;
+    public TextMesh text_title_tm, text_artist_tm, text_animation_tm, text_translated_tm;
+    public int index;
+    public string _title, _artist, _animation, _translated;
+    public Button button;
+    public Image image;
+    public Image side_image;
     // Start is called before the first frame update
     void Start()
     {
-        update_request = false; // not now
+
+        /*
         wheelObject = gameObject;
 
         text_title = new GameObject();
@@ -33,9 +37,11 @@ public class MusicWheelItem : MonoBehaviour
         text_translated_tm = text_translated.AddComponent<TextMesh>();
 
         wheelObject.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-
+        
         SetTextColor(Color.white);
-        SetText("Title", "Artist someone", "Animation", "Translation");
+        //SetText("Title", "Artist someone", "Animation", "Translation");
+
+        
         text_title.transform.localPosition = new Vector3(0, 3, 0);
         text_title_tm.fontSize = 24;
 
@@ -48,17 +54,26 @@ public class MusicWheelItem : MonoBehaviour
 
         text_translated.transform.localPosition = new Vector3(0, 5, 0);
         text_translated_tm.fontSize = 1;        //not using now;
+        */
+        SetTextColor(Color.black);
+        text_translated_tm.color = new Color(49 / 255f, 49 / 255f, 49 / 255f, 125 / 255f);
 
+        side_image_obj = new GameObject();
+        side_image_obj.transform.parent = this.transform;
+        side_image = side_image_obj.AddComponent<Image>();
+        Sprite TempImg = Resources.Load("Graphics/_glider(stretch)", typeof(Sprite)) as Sprite;
+        //改变图片
+        side_image.sprite = TempImg;
+        side_image.GetComponent<RectTransform>().sizeDelta = new Vector2(0.2f, 0.8f);
+        side_image.transform.localPosition = new Vector3(-1.2f, 0, 0);
+        side_image.color = new Color(0 / 255f, 0 / 255f, 0 / 255f, 125 / 255f);
+        side_image_obj.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (update_request)
-        // only update when needed.
-        {
-            update_request = false;
-        }
+        gameObject.transform.localPosition = new Vector3(-160, -20 + index * 50 - MusicWheelBase.GetWheelPos()*MusicWheelBase.GetWheelItemCount()*50, -1);
     }
     public void SetTextColor(Color c)
     {
@@ -66,7 +81,6 @@ public class MusicWheelItem : MonoBehaviour
         text_artist_tm.color = c;
         text_animation_tm.color = c;
         text_translated_tm.color = c;
-        update_request = true;
     }
     public void SetText(string title,string artist,string anime,string trans)
     {
@@ -74,15 +88,46 @@ public class MusicWheelItem : MonoBehaviour
         _artist = artist;
         _animation = anime;
         _translated = trans;
-        text_title_tm.text = _title;
-        text_artist_tm.text = _artist;
-        text_animation_tm.text = _animation;
-        text_translated_tm.text = _translated;
-        update_request = true;
+        text_title_tm.text = LanguageManager.UTF8String(_title);
+        text_artist_tm.text = LanguageManager.UTF8String(_artist);
+        text_animation_tm.text = LanguageManager.UTF8String(_animation);
+        text_translated_tm.text = LanguageManager.UTF8String(_translated);
     }
     public void Settitle(string s)
     {
         _title = s;
-        update_request = true;
+    }
+    public void ButtonClicked()
+    {
+        print(string.Format("{0} clicked. Play {1}", index,text_title_tm.text));
+        side_image_obj.SetActive(true);
+        GameObject.Find("SongTitleText").GetComponent<Text>().text = LanguageManager.UTF8String(MusicLoader.SongList[index].title);
+        GameObject.Find("SongAnimeText").GetComponent<Text>().text = LanguageManager.UTF8String(MusicLoader.SongList[index].animation);
+        //text_title_tm.text = LanguageManager.UTF8String(MusicLoader.SongList[index].title);
+        //image.color = new Color(0 / 255f, 0 / 255f, 0 / 255f, 125 / 255f);
+        MusicPlayer.LoadAudio(MusicLoader.SongList[index].title, MusicLoader.SongList[index].music);
+        MusicPlayer.PlayAudio(MusicLoader.SongList[index].title);
+        Image img = GameObject.Find("SongImage").GetComponent<Image>();
+        FileStream fileStream = new FileStream(MusicLoader.SongList[index].image, FileMode.Open, FileAccess.Read);
+        fileStream.Seek(0, SeekOrigin.Begin);
+        //创建文件长度缓冲区
+        byte[] bytes = new byte[fileStream.Length];
+        //读取文件
+        fileStream.Read(bytes, 0, (int)fileStream.Length);
+        //释放文件读取流
+        fileStream.Close();
+        fileStream.Dispose();
+        fileStream = null;
+
+        //创建Texture
+        int width = 570;
+        int height = 880;
+        Texture2D texture = new Texture2D(width, height);
+        texture.LoadImage(bytes);
+
+        //创建Sprite
+        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        img.sprite = sprite;
+
     }
 }

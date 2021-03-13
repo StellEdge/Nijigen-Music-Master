@@ -1,12 +1,9 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicWheel : MonoBehaviour
+public class WheelItmButton : MonoBehaviour
 {
-    private List<MusicWheelItem> wheelItems;
-    //awaiting 
     // Start is called before the first frame update
     void Start()
     {
@@ -17,10 +14,5 @@ public class MusicWheel : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void ValueChanged()
-    {
-
     }
 }

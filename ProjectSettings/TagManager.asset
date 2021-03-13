@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - MusicPlayer
+  - SongList
+  - SongListScroll
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Background
   - 
   - 
   - 
@@ -39,6 +41,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1482873805
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
