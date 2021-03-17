@@ -75,6 +75,7 @@
     <Compile Include="Assets\scripts\NAudioPlayer.cs" />
     <Compile Include="Assets\scripts\PlayButton.cs" />
     <Compile Include="Assets\scripts\ProgressIcon.cs" />
+    <Compile Include="Assets\scripts\RandomNext.cs" />
     <Compile Include="Assets\scripts\Reshuffle.cs" />
     <Compile Include="Assets\scripts\Scrolling.cs" />
     <Compile Include="Assets\scripts\SongProgressbar.cs" />

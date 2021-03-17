@@ -313,7 +313,6 @@ public static class MusicLoader
 		SongList = Shuffle<MusicData>(SongList);
 		CreateWheelItems(SongList);
 	}
-
 	public static List<T> Shuffle<T>(List<T> original)
 	{
 		System.Random randomNum = new System.Random();

@@ -36,5 +36,11 @@ public class SongProgressbar : MonoBehaviour
 
         //print("代码控制" + T);
     }
+    public void SetProgress(float T)
+    {
+        MusicPlayer.PlayAudioAtPos(T);
+        m_Scrollbar.value = T;
+        //print("代码控制" + T);
+    }
 
 }

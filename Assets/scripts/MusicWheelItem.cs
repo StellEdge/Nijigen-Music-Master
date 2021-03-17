@@ -13,6 +13,7 @@ public class MusicWheelItem : MonoBehaviour
     public Button button;
     public Image image;
     public Image side_image;
+    public bool played;
     // Start is called before the first frame update
     void Start()
     {
@@ -68,6 +69,7 @@ public class MusicWheelItem : MonoBehaviour
         side_image.transform.localPosition = new Vector3(-1.2f, 0, 0);
         side_image.color = new Color(0 / 255f, 0 / 255f, 0 / 255f, 125 / 255f);
         side_image_obj.SetActive(false);
+        played = false;
     }
 
     // Update is called once per frame
@@ -101,6 +103,7 @@ public class MusicWheelItem : MonoBehaviour
     {
         print(string.Format("{0} clicked. Play {1}", index,text_title_tm.text));
         side_image_obj.SetActive(true);
+        played = true;
         GameObject.Find("SongTitleText").GetComponent<Text>().text = LanguageManager.UTF8String(MusicLoader.SongList[index].title);
         GameObject.Find("SongAnimeText").GetComponent<Text>().text = LanguageManager.UTF8String(MusicLoader.SongList[index].animation);
         //text_title_tm.text = LanguageManager.UTF8String(MusicLoader.SongList[index].title);
