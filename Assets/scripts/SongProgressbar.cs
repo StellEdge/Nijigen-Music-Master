@@ -16,7 +16,11 @@ public class SongProgressbar : MonoBehaviour
         {
 
         }
-            
+        if (MusicPlayer.GetCurAudio() != "" || MusicPlayer.GetCurAudio()!=null)
+        {
+            GameObject.Find("SongTimeText").GetComponent<Text>().text = LanguageManager.ConvToTime(m_Scrollbar.value * MusicPlayer.GetSongLength()) +
+                "/" + LanguageManager.ConvToTime(MusicPlayer.GetSongLength());
+        }
     }
     private Scrollbar m_Scrollbar;
     void Start()
@@ -29,11 +33,7 @@ public class SongProgressbar : MonoBehaviour
     private void OnValueChangedPrivate(float T)
     {
         MusicPlayer.PlayAudioAtPos(T);
-        if (!MusicPlayer.GetIsPlaying())
-        {
-            GameObject.Find("SongTimeText").GetComponent<Text>().text = LanguageManager.ConvToTime(T * MusicPlayer.GetSongLength()) +
-                "/" + LanguageManager.ConvToTime(MusicPlayer.GetSongLength());
-        }
+
         //print("代码控制" + T);
     }
 

@@ -9,15 +9,22 @@ public static class MusicPlayer
 {
     private const string cLocalPath = "file:///";
     private static Dictionary<string, AudioClip> audioDic = new Dictionary<string, AudioClip>();
-    public static string currentAudio;
+    public static string currentAudio= "";
     private static AudioSource bgAudioSource;
     private static bool is_playing;
 
     private static object audioload_lock = new object();
 
+    public static string GetCurAudio()
+    {
+        return currentAudio;
+    }
     public static float GetSongLength()
     {
-        return bgAudioSource.clip.length;
+        if (bgAudioSource.clip)
+            return bgAudioSource.clip.length;
+        else
+            return 0.01f;
     }
     public static bool GetIsPlaying()
     {
@@ -135,12 +142,12 @@ public static class MusicPlayer
             }
         }
     }
-    public static void PauseAudio(int index)
+    public static void PauseAudio()
     {
         bgAudioSource.Pause();
         is_playing = false;
     }
-    public static void ResumeAudio(int index)
+    public static void ResumeAudio()
     {
         bgAudioSource.UnPause();
         is_playing = true;

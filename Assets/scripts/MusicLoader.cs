@@ -273,10 +273,10 @@ public static class MusicLoader
 			temp.text_title.transform.localPosition = new Vector3(0, 2.8f, 0);
 			temp.text_title_tm.fontSize = 24;
 
-			temp.text_artist.transform.localPosition = new Vector3(0, -0.2f, 0);
-			temp.text_artist_tm.fontSize = 16;
+			temp.text_artist.transform.localPosition = new Vector3(0, -1f, 0);
+			temp.text_artist_tm.fontSize = 12;
 
-			temp.text_animation.transform.localPosition = new Vector3(38, -0.2f, 0);
+			temp.text_animation.transform.localPosition = new Vector3(38, -0.8f, 0);
 			temp.text_animation_tm.fontSize = 16;
 			temp.text_animation_tm.anchor = TextAnchor.UpperRight;
 

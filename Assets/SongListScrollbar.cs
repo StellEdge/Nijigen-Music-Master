@@ -6,13 +6,14 @@ using UnityEngine.UI;
 public class SongListScrollbar : MonoBehaviour
 {
     // Update is called once per frame
+    private bool HasFocus;
     void Update()
     {
-        if(Input.GetAxis("Mouse ScrollWheel") > 0 && m_Scrollbar.value<1)
+        if(HasFocus && Input.GetAxis("Mouse ScrollWheel") > 0 && m_Scrollbar.value<1)
         {
             m_Scrollbar.value += 0.02f;
         }
-        if(Input.GetAxis("Mouse ScrollWheel") < 0 && m_Scrollbar.value>0)
+        if(HasFocus && Input.GetAxis("Mouse ScrollWheel") < 0 && m_Scrollbar.value>0)
         {
             m_Scrollbar.value -= 0.02f;
         }
@@ -34,5 +35,9 @@ public class SongListScrollbar : MonoBehaviour
         MusicWheelBase.UpdateWheelPos(T);
         //print("代码控制" + T);
     }
-    
+    void OnApplicationFocus(bool focus)
+    {
+        //Debug.Log(string.Format("OnApplicationFocus:{0}", focus));
+        HasFocus = focus;
+    }
 }
