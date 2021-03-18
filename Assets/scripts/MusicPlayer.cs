@@ -76,8 +76,15 @@ public static class MusicPlayer
         {
             return;
         }
+        if (!File.Exists(path))
+        {
+            Debug.Log("No such file:" + path);
+            debugtext.Add("MyDebug", "No such file: " + path);
+        }
+
         AudioClip clip;
         FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+        debugtext.Add("Music Loading",path);
         fileStream.Seek(0, SeekOrigin.Begin);
         //创建文件长度缓冲区
         byte[] bytes = new byte[fileStream.Length];
@@ -87,15 +94,19 @@ public static class MusicPlayer
         fileStream.Close();
         fileStream.Dispose();
         fileStream = null;
+        /*
         if (bytes.Length != 0)
         {
             //WWW www = new WWW(musicfilepath);
             clip = NAudioPlayer.FromMp3Data(bytes);
+            
         }
         else
         {
             clip = null;
-        }
+            debugtext.Add("MyDebug", "Load " + audioName + "failed");
+        }*/
+        clip = NAudioPlayer.FromMp3Data(bytes);
         audioDic.Add(audioName, clip);
         Debug.Log("Load " + audioName);
     }

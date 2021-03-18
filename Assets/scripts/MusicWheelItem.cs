@@ -121,7 +121,6 @@ public class MusicWheelItem : MonoBehaviour
         fileStream.Close();
         fileStream.Dispose();
         fileStream = null;
-
         //创建Texture
         //int width = 570;
         //int height = 880;

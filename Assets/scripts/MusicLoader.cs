@@ -27,7 +27,13 @@ public static class MusicLoader
 		{
 			MUSICPATH = MusicDataPath.MUSICPATH_DEBUG;
 		}
-
+		if (!Directory.Exists(MUSICPATH))
+		{
+			MUSICPATH = MusicDataPath.MUSICPATH_ANDROID;
+		}
+		//MUSICPATH = MusicDataPath.MUSICPATH_ANDROID;
+		debugtext.Add("MyDebug", "MUSICPATH " + MUSICPATH);
+		Debug.Log("MUSICPATH " + MUSICPATH);
 		musicfolders = new List<MusicFolder>();
 		MusicFolder temp_musicfolder;
 		MusicData temp_music = new MusicData();
@@ -50,8 +56,8 @@ public static class MusicLoader
 						temp_musicfolder.musicdata.Clear();
 						foreach(string[] info in musiclist){
 							//temp_music.SetMusicData(info);
-							info[6] = MUSICPATH + musicsets[i].Name + '/' + info[6];
-							info[7] = MUSICPATH + musicsets[i].Name + '/' + info[7];
+							info[6] = MUSICPATH + musicsets[i].Name + "//" + info[6];
+							info[7] = MUSICPATH + musicsets[i].Name + "//" + info[7];
 							temp_musicfolder.musicdata.Add(new MusicData(info));
 						}	
 						Debug.Log( "Loaded pack csv:" + musicsets[i].Name ); 
@@ -112,7 +118,6 @@ public static class MusicLoader
 	{
 		MusicFolder mf = obj as MusicFolder;
 		Debug.Log("Start loading " + mf.Name);
-		AudioClip clip;
 		foreach (MusicData md in mf.musicdata)
 		{
 			//string musicfilepath = cLocalPath + md.music;

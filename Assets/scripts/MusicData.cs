@@ -46,7 +46,7 @@ public class MusicWheelBase
 public class MusicDataPath
 {
 	public static string MUSICPATH_DEBUG = "D:/Unitykit/MusicData/";
-
+	public static string MUSICPATH_ANDROID = Application.persistentDataPath+ "/MusicData/";
 	public static string MUSICPATH = System.Environment.CurrentDirectory+"/MusicData/";
 	//result: X:\xxx\xxx(.exe文件所在的目录)
 }
@@ -81,5 +81,16 @@ public class MusicFolder{
 	public string Name;
 	public MusicFolder(){
 		musicdata = new List<MusicData>();
+	}
+}
+
+public static class FileManager
+{
+	public static byte[] ReadBytes(string path)
+    {
+		byte[] bytes = new byte[0];
+		//在这里做文件读取
+
+		return bytes;
 	}
 }
