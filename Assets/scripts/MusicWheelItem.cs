@@ -75,7 +75,7 @@ public class MusicWheelItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.localPosition = new Vector3(-160, -20 + index * 50 - MusicWheelBase.GetWheelPos()*MusicWheelBase.GetWheelItemCount()*50, -1);
+        gameObject.transform.localPosition = new Vector3(-160, index * 50 - MusicWheelBase.GetWheelPos()*(MusicWheelBase.GetWheelItemCount()-1)*50, -1);
     }
     public void SetTextColor(Color c)
     {
@@ -110,17 +110,15 @@ public class MusicWheelItem : MonoBehaviour
         //image.color = new Color(0 / 255f, 0 / 255f, 0 / 255f, 125 / 255f);
         MusicPlayer.LoadAudio(MusicLoader.SongList[index].title, MusicLoader.SongList[index].music);
         MusicPlayer.PlayAudio(MusicLoader.SongList[index].title);
+
+        //StartCoroutine(LoadImage(MusicLoader.SongList[index].image));
+        
         Image img = GameObject.Find("SongImage").GetComponent<Image>();
-        FileStream fileStream = new FileStream(MusicLoader.SongList[index].image, FileMode.Open, FileAccess.Read);
-        fileStream.Seek(0, SeekOrigin.Begin);
-        //创建文件长度缓冲区
-        byte[] bytes = new byte[fileStream.Length];
-        //读取文件
-        fileStream.Read(bytes, 0, (int)fileStream.Length);
-        //释放文件读取流
-        fileStream.Close();
-        fileStream.Dispose();
-        fileStream = null;
+
+        //byte[] bytes = FileManager.ReadBytesSystemIO(MusicLoader.SongList[index].image);
+
+        byte[] bytes = FileManager.ReadBytesWWW(MusicLoader.SongList[index].image);
+
         //创建Texture
         //int width = 570;
         //int height = 880;
@@ -136,5 +134,29 @@ public class MusicWheelItem : MonoBehaviour
         img.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width * ratio, texture.height * ratio);
         
 
+    }
+    private IEnumerator LoadImage(string imgUrl)
+    {
+        #if UNITY_EDITOR || UNITY_IOS
+            imgUrl = "file://" + imgUrl;
+        #endif
+        // 根据连接下载
+        Image img = GameObject.Find("SongImage").GetComponent<Image>();
+        WWW www = new WWW(imgUrl);
+        // 等待WWW代码执行完毕之后后面的代码才会执行。
+        yield return www;
+        //创建Texture
+        //int width = 570;
+        //int height = 880;
+        Texture2D texture = new Texture2D(0, 0);
+        texture.LoadImage(www.bytes);
+
+        //创建Sprite
+        int area = texture.width * texture.height;
+        int max_area = 570 * 880;
+        float ratio = (float)(System.Math.Sqrt(max_area * 1.0f / area));
+        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        img.sprite = sprite;
+        img.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width * ratio, texture.height * ratio);
     }
 }

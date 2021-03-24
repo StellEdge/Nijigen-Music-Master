@@ -31,9 +31,14 @@ public class RandomNext : MonoBehaviour
                 itemlist.Add(i);
             }
         }
-
+        //Random.InitState(1);
         int index = Random.Range(0,itemlist.Count);
         MusicWheelItem item = GameObject.Find("WheelItem"+string.Format("{0}",itemlist[index])).GetComponent<MusicWheelItem>();
+
+        float t = itemlist[index] * 1.0f / (MusicWheelBase.GetWheelItemCount() - 1);
+        MusicWheelBase.UpdateWheelPos(t);
+        Scrollbar m_Scrollbar = GameObject.Find("Scrollbar").GetComponent<Scrollbar>();
+        m_Scrollbar.value = t;
         item.ButtonClicked();
 
         float pos = Random.Range(0f, 0.8f);

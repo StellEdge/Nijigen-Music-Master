@@ -7,6 +7,7 @@ public class SongListScrollbar : MonoBehaviour
 {
     // Update is called once per frame
     private bool HasFocus;
+    private Vector2 m_screenpos = new Vector2();
     void Update()
     {
         if(HasFocus && Input.GetAxis("Mouse ScrollWheel") > 0 && m_Scrollbar.value<1)
@@ -16,6 +17,22 @@ public class SongListScrollbar : MonoBehaviour
         if(HasFocus && Input.GetAxis("Mouse ScrollWheel") < 0 && m_Scrollbar.value>0)
         {
             m_Scrollbar.value -= 0.02f;
+        }
+
+        if (HasFocus && Input.touchCount == 1)
+        {
+            
+            if (Input.touches[0].phase == TouchPhase.Began)
+            {
+                // 记录手指触屏的位置  
+                m_screenpos = Input.touches[0].position;
+
+            }
+            // 手指移动  
+            else if (Input.touches[0].phase == TouchPhase.Moved)
+            {
+                m_Scrollbar.value -= Input.touches[0].deltaPosition.y/50 * Time.deltaTime;
+            }
         }
     }
     private Scrollbar m_Scrollbar;

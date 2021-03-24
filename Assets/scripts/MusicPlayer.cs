@@ -5,6 +5,7 @@ using NAudio;
 using NAudio.Wave;
 using System.IO;
 using System.Threading;
+
 public static class MusicPlayer
 {
     private const string cLocalPath = "file:///";
@@ -83,30 +84,11 @@ public static class MusicPlayer
         }
 
         AudioClip clip;
-        FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-        debugtext.Add("Music Loading",path);
-        fileStream.Seek(0, SeekOrigin.Begin);
-        //创建文件长度缓冲区
-        byte[] bytes = new byte[fileStream.Length];
-        //读取文件
-        fileStream.Read(bytes, 0, (int)fileStream.Length);
-        //释放文件读取流
-        fileStream.Close();
-        fileStream.Dispose();
-        fileStream = null;
-        /*
-        if (bytes.Length != 0)
-        {
-            //WWW www = new WWW(musicfilepath);
-            clip = NAudioPlayer.FromMp3Data(bytes);
-            
-        }
-        else
-        {
-            clip = null;
-            debugtext.Add("MyDebug", "Load " + audioName + "failed");
-        }*/
-        clip = NAudioPlayer.FromMp3Data(bytes);
+        //byte[] bytes = FileManager.ReadBytesSystemIO(path);
+        //byte[] bytes = FileManager.ReadBytesWWW(path);
+
+        //clip = NAudioPlayer.FromMp3Data(bytes);
+        clip = FileManager.ReadMp3WWW(path);
         audioDic.Add(audioName, clip);
         Debug.Log("Load " + audioName);
     }

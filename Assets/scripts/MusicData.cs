@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
-
+using System.IO;
 public class LanguageManager
 {
 	public static string UTF8String(string input)
@@ -47,6 +47,7 @@ public class MusicDataPath
 {
 	public static string MUSICPATH_DEBUG = "D:/Unitykit/MusicData/";
 	public static string MUSICPATH_ANDROID = Application.persistentDataPath+ "/MusicData/";
+	//public static string MUSICPATH_ANDROID = "/storage/emulated/0/NijigenMusicMaster/MusicData/";
 	public static string MUSICPATH = System.Environment.CurrentDirectory+"/MusicData/";
 	//result: X:\xxx\xxx(.exe文件所在的目录)
 }
@@ -86,11 +87,39 @@ public class MusicFolder{
 
 public static class FileManager
 {
-	public static byte[] ReadBytes(string path)
+	public static byte[] ReadBytesSystemIO(string path)
     {
-		byte[] bytes = new byte[0];
 		//在这里做文件读取
-
+		FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+		fileStream.Seek(0, SeekOrigin.Begin);
+		//创建文件长度缓冲区
+		byte[] bytes = new byte[fileStream.Length];
+		//读取文件
+		fileStream.Read(bytes, 0, (int)fileStream.Length);
+		//释放文件读取流
+		fileStream.Close();
+		fileStream.Dispose();
+		fileStream = null;
 		return bytes;
+	}
+	public static byte[] ReadBytesWWW(string _path)
+	{
+		#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID
+			_path = "file:///" + _path;
+		#endif
+		Debug.Log("FileManager:Reading "+ _path);
+		WWW www = new WWW(_path);
+		while (!www.isDone);
+		return www.bytes;
+	}
+	public static AudioClip ReadMp3WWW(string _path)
+	{
+		#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID
+				_path = "file:///" + _path;
+		#endif
+		Debug.Log("FileManager:Reading " + _path);
+		WWW www = new WWW(_path);
+		while (!www.isDone) ;
+		return www.GetAudioClip(true, false, AudioType.MPEG);
 	}
 }

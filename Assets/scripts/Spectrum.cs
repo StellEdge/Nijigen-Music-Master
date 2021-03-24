@@ -27,10 +27,6 @@ public class Spectrum : MonoBehaviour
         //Get and store a reference to the following attached components:  
         //AudioSource  
         this.aSource = GetComponent<AudioSource>();
-        //LineRenderer  
-        this.lRenderer = GetComponent<LineRenderer>();
-        //Transform  
-        this.goTransform = GetComponent<Transform>();
         MusicPlayer.InitMusicPlayer(aSource);
     }
 
