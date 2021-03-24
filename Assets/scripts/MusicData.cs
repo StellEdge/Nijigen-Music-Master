@@ -120,6 +120,7 @@ public static class FileManager
 		Debug.Log("FileManager:Reading " + _path);
 		WWW www = new WWW(_path);
 		while (!www.isDone) ;
-		return www.GetAudioClip(true, false, AudioType.MPEG);
+		AudioClip clip = www.GetAudioClip(true, false, AudioType.MPEG);
+		return clip;
 	}
 }

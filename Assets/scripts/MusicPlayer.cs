@@ -82,7 +82,12 @@ public static class MusicPlayer
             Debug.Log("No such file:" + path);
             debugtext.Add("MyDebug", "No such file: " + path);
         }
-
+        foreach (string key in audioDic.Keys)
+        {
+            AudioClip.Destroy(audioDic[key]);
+            audioDic.Remove(key);
+            break;
+        }
         AudioClip clip;
         //byte[] bytes = FileManager.ReadBytesSystemIO(path);
         //byte[] bytes = FileManager.ReadBytesWWW(path);

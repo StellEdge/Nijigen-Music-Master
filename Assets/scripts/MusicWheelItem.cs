@@ -112,10 +112,8 @@ public class MusicWheelItem : MonoBehaviour
         MusicPlayer.PlayAudio(MusicLoader.SongList[index].title);
 
         //StartCoroutine(LoadImage(MusicLoader.SongList[index].image));
-        
+        /*
         Image img = GameObject.Find("SongImage").GetComponent<Image>();
-
-        //byte[] bytes = FileManager.ReadBytesSystemIO(MusicLoader.SongList[index].image);
 
         byte[] bytes = FileManager.ReadBytesWWW(MusicLoader.SongList[index].image);
 
@@ -132,8 +130,23 @@ public class MusicWheelItem : MonoBehaviour
         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         img.sprite = sprite;
         img.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width * ratio, texture.height * ratio);
-        
+        */
+        RawImage img = GameObject.Find("SongImage").GetComponent<RawImage>();
 
+        byte[] bytes = FileManager.ReadBytesWWW(MusicLoader.SongList[index].image);
+
+        //创建Texture
+        //int width = 570;
+        //int height = 880;
+        Texture2D texture = new Texture2D(0, 0);
+        texture.LoadImage(bytes);
+        Destroy(img.texture);
+        //创建Sprite
+        int area = texture.width * texture.height;
+        int max_area = 570 * 880;
+        float ratio = (float)(System.Math.Sqrt(max_area * 1.0f / area));
+        img.texture = texture;
+        img.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width * ratio, texture.height * ratio);
     }
     private IEnumerator LoadImage(string imgUrl)
     {
