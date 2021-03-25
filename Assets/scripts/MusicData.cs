@@ -87,6 +87,67 @@ public class MusicFolder{
 
 public static class FileManager
 {
+	public static string GetAndroidMusicDataFilesDir()
+	{
+		string[] potentialDirectories = new string[]
+		{
+			"/storage",
+			"/sdcard",
+			"/storage/emulated/0",
+			"/mnt/sdcard",
+			"/storage/sdcard0",
+			"/storage/sdcard1"
+		};
+
+		if (Application.platform == RuntimePlatform.Android)
+		{
+			for (int i = 0; i < potentialDirectories.Length; i++)
+			{
+				if (Directory.Exists(potentialDirectories[i]+ "/NijigenMusicMaster/MusicData"))
+				{
+					return potentialDirectories[i] + "/NijigenMusicMaster/MusicData";
+				}
+			}
+		}
+		return "";
+	}
+
+	public static string GetMusicDataPath()
+    {
+		string[] MUSICPATHS_WIN = new string[]
+		{
+			"D:/Unitykit/MusicData",
+			System.Environment.CurrentDirectory + "/MusicData"
+		};
+		string[] MUSICPATHS_ANDROID = new string[]
+		{
+			Application.persistentDataPath + "/MusicData"
+		};
+		if (Application.platform == RuntimePlatform.Android)
+        {
+			for (int i = 0; i < MUSICPATHS_ANDROID.Length; i++)
+			{
+				if (Directory.Exists(MUSICPATHS_ANDROID[i]))
+				{
+					return MUSICPATHS_ANDROID[i];
+				}
+			}
+			return GetAndroidMusicDataFilesDir();
+		}
+		else if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+        {
+			for (int i = 0; i < MUSICPATHS_WIN.Length; i++)
+			{
+				if (Directory.Exists(MUSICPATHS_WIN[i]))
+				{
+					return MUSICPATHS_WIN[i];
+				}
+			}
+		}
+			
+		return "";
+	}
+
 	public static byte[] ReadBytesSystemIO(string path)
     {
 		//在这里做文件读取

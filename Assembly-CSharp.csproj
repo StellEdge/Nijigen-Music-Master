@@ -67,7 +67,10 @@
     <Compile Include="Assets\SongListScrollbar.cs" />
     <Compile Include="Assets\scripts\AudioPlayer.cs" />
     <Compile Include="Assets\scripts\AudioSpectrum.cs" />
+    <Compile Include="Assets\scripts\AutoNextButton.cs" />
     <Compile Include="Assets\scripts\CurrentFolders.cs" />
+    <Compile Include="Assets\scripts\FullAutoButton.cs" />
+    <Compile Include="Assets\scripts\LimitTVSize.cs" />
     <Compile Include="Assets\scripts\MusicData.cs" />
     <Compile Include="Assets\scripts\MusicLoader.cs" />
     <Compile Include="Assets\scripts\MusicManager.cs" />
@@ -85,6 +88,7 @@
     <Compile Include="Assets\scripts\PlayButton.cs" />
     <Compile Include="Assets\scripts\ProgressIcon.cs" />
     <Compile Include="Assets\scripts\RandomNext.cs" />
+    <Compile Include="Assets\scripts\RedoRandom.cs" />
     <Compile Include="Assets\scripts\Reshuffle.cs" />
     <Compile Include="Assets\scripts\Scrolling.cs" />
     <Compile Include="Assets\scripts\SongProgressbar.cs" />

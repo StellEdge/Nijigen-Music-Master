@@ -33,6 +33,7 @@ public class RandomNext : MonoBehaviour
         }
         //Random.InitState(1);
         int index = Random.Range(0,itemlist.Count);
+        GameObject.Find("RedoRandomButton").GetComponent<RedoRandom>().AddRandom(itemlist[index]);
         MusicWheelItem item = GameObject.Find("WheelItem"+string.Format("{0}",itemlist[index])).GetComponent<MusicWheelItem>();
 
         float t = itemlist[index] * 1.0f / (MusicWheelBase.GetWheelItemCount() - 1);
@@ -42,6 +43,13 @@ public class RandomNext : MonoBehaviour
         item.ButtonClicked();
 
         float pos = Random.Range(0f, 0.8f);
+        if (GameObject.Find("LimTVSizeButton").GetComponent<LimitTVSize>().LimitTvSize)
+        {
+            float songlen = MusicPlayer.GetSongLength();
+            float sec = Random.Range(0f, 80f);
+            pos = sec / songlen;
+        }
+        
         GameObject.Find("SongProgressBar").GetComponent<SongProgressbar>().SetProgress(pos);
     }
 }

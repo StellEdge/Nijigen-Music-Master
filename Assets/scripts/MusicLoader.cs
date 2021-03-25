@@ -23,6 +23,7 @@ public static class MusicLoader
 
 	public static void InitMusicLoader()
 	{
+		/*
 		if (!Directory.Exists(MUSICPATH))
 		{
 			MUSICPATH = MusicDataPath.MUSICPATH_DEBUG;
@@ -30,8 +31,8 @@ public static class MusicLoader
 		if (!Directory.Exists(MUSICPATH))
 		{
 			MUSICPATH = MusicDataPath.MUSICPATH_ANDROID;
-		}
-		//MUSICPATH = MusicDataPath.MUSICPATH_ANDROID;
+		}*/
+		MUSICPATH = FileManager.GetMusicDataPath()+"/";
 		debugtext.Add("MyDebug", "MUSICPATH " + MUSICPATH);
 		Debug.Log("MUSICPATH " + MUSICPATH);
 		musicfolders = new List<MusicFolder>();

@@ -97,13 +97,22 @@ public static class MusicPlayer
         audioDic.Add(audioName, clip);
         Debug.Log("Load " + audioName);
     }
+
+    public static float GetAudioPosSec()
+    {
+        if (currentAudio != null)
+        {
+            return bgAudioSource.time;
+        }
+        return 0f;
+    }
     public static float GetAudioPos()
     {
         if (currentAudio != null)
         {
             return bgAudioSource.time/ bgAudioSource.clip.length;
         }
-        return 0;
+        return 0f;
     }
 
     public static void PlayAudioAtPos(float f)
@@ -157,5 +166,10 @@ public static class MusicPlayer
     public static void SetVolume(float f)
     {
         bgAudioSource.volume = f;
+    }
+
+    public static float GetVolume()
+    {
+        return bgAudioSource.volume;
     }
 }
