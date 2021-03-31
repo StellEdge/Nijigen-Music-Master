@@ -172,4 +172,12 @@ public static class MusicPlayer
     {
         return bgAudioSource.volume;
     }
+    public static void PlayXinBaoDao()
+    {
+        bgAudioSource.Stop();
+        is_playing = false;
+        bgAudioSource.clip = (AudioClip)Resources.Load("xinbaodao", typeof(AudioClip));
+        currentAudio = "XinBaoDao";
+        bgAudioSource.Play();
+    }
 }

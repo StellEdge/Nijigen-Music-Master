@@ -27,7 +27,7 @@ public class FullAutoButton : MonoBehaviour
             if (MusicPlayer.GetIsPlaying())
             {
                 timer += Time.deltaTime;
-                if (timer > 30f)
+                if (timer > 30f || MusicPlayer.GetSongLength() - MusicPlayer.GetAudioPosSec() < 0.02f)
                 {
                     timer = 0f;
                     GameObject.Find("RandomNextButton").GetComponent<RandomNext>().ButtonOnClickEvent();
@@ -38,6 +38,10 @@ public class FullAutoButton : MonoBehaviour
                 if (timer > 25f)
                 {
                     MusicPlayer.SetVolume(volume * (30f - timer) / 5);
+                }
+                else
+                {
+                    volume = MusicPlayer.GetVolume();
                 }
             }
             else

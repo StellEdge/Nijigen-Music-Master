@@ -17,45 +17,6 @@ public class MusicWheelItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        /*
-        wheelObject = gameObject;
-
-        text_title = new GameObject();
-        text_title.transform.parent = this.transform;
-        text_title_tm = text_title.AddComponent<TextMesh>();
-
-        text_artist = new GameObject();
-        text_artist.transform.parent = this.transform;
-        text_artist_tm = text_artist.AddComponent<TextMesh>();
-
-        text_animation = new GameObject();
-        text_animation.transform.parent = this.transform;
-        text_animation_tm = text_animation.AddComponent<TextMesh>();
-
-        text_translated = new GameObject();
-        text_translated.transform.parent = this.transform;
-        text_translated_tm = text_translated.AddComponent<TextMesh>();
-
-        wheelObject.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-        
-        SetTextColor(Color.white);
-        //SetText("Title", "Artist someone", "Animation", "Translation");
-
-        
-        text_title.transform.localPosition = new Vector3(0, 3, 0);
-        text_title_tm.fontSize = 24;
-
-        text_artist.transform.localPosition = new Vector3(0, 0, 0);
-        text_artist_tm.fontSize = 16;
-
-        text_animation.transform.localPosition = new Vector3(20, 0, 0);
-        text_animation_tm.fontSize = 16;
-        text_animation_tm.alignment=TextAlignment.Right;
-
-        text_translated.transform.localPosition = new Vector3(0, 5, 0);
-        text_translated_tm.fontSize = 1;        //not using now;
-        */
         SetTextColor(Color.black);
         text_translated_tm.color = new Color(49 / 255f, 49 / 255f, 49 / 255f, 125 / 255f);
 
@@ -75,7 +36,7 @@ public class MusicWheelItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.localPosition = new Vector3(-160, index * 50 - MusicWheelBase.GetWheelPos()*(MusicWheelBase.GetWheelItemCount()-1)*50, -1);
+        gameObject.transform.localPosition = new Vector3(-160, -index * 50 + MusicWheelBase.GetWheelPos()*(MusicWheelBase.GetWheelItemCount()-1)*50, -1);
     }
     public void SetTextColor(Color c)
     {
@@ -111,26 +72,6 @@ public class MusicWheelItem : MonoBehaviour
         MusicPlayer.LoadAudio(MusicLoader.SongList[index].title, MusicLoader.SongList[index].music);
         MusicPlayer.PlayAudio(MusicLoader.SongList[index].title);
 
-        //StartCoroutine(LoadImage(MusicLoader.SongList[index].image));
-        /*
-        Image img = GameObject.Find("SongImage").GetComponent<Image>();
-
-        byte[] bytes = FileManager.ReadBytesWWW(MusicLoader.SongList[index].image);
-
-        //创建Texture
-        //int width = 570;
-        //int height = 880;
-        Texture2D texture = new Texture2D(0,0);
-        texture.LoadImage(bytes);
-
-        //创建Sprite
-        int area = texture.width * texture.height;
-        int max_area = 570 * 880;
-        float ratio = (float)(System.Math.Sqrt(max_area *1.0f / area));
-        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-        img.sprite = sprite;
-        img.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width * ratio, texture.height * ratio);
-        */
         RawImage img = GameObject.Find("SongImage").GetComponent<RawImage>();
 
         byte[] bytes = FileManager.ReadBytesWWW(MusicLoader.SongList[index].image);

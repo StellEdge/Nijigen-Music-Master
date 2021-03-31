@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Text;
 using System.IO;
 public class LanguageManager
@@ -41,8 +42,27 @@ public class MusicWheelBase
 	{
 		return ItemCount;
 	}
+	public static int GetCurSongIndex()
+    {
+		int index = 0;
+		for (int i = 0; i < MusicWheelBase.GetWheelItemCount(); i++)
+		{
+			if (MusicLoader.SongList[i].title == MusicPlayer.GetCurAudio())
+			{
+				index = i;
+				break;
+			}
+		}
+		return index;
+	}
+	public static void SetWheelPosIndex(int index)
+    {
+		float t = index * 1.0f / (MusicWheelBase.GetWheelItemCount() - 1);
+		MusicWheelBase.UpdateWheelPos(t);
+		Scrollbar m_Scrollbar = GameObject.Find("Scrollbar").GetComponent<Scrollbar>();
+		m_Scrollbar.value = t;
+	}
 }
-
 public class MusicDataPath
 {
 	public static string MUSICPATH_DEBUG = "D:/Unitykit/MusicData/";
@@ -54,7 +74,7 @@ public class MusicDataPath
 public class MusicData{
 	public int NO;
 	public string title,subtitle,artist,translated,animation,music,image;
-
+	public string packname;
 	public MusicData()
     {
 
@@ -73,9 +93,9 @@ public class MusicData{
 		animation = info[5];
 		music = info[6];
 		image = info[7];
+		//packname = info[8];
 	}
 }
-
 public class MusicFolder{
 	public List<MusicData> musicdata;
 	public int Length;
@@ -84,7 +104,6 @@ public class MusicFolder{
 		musicdata = new List<MusicData>();
 	}
 }
-
 public static class FileManager
 {
 	public static string GetAndroidMusicDataFilesDir()
@@ -116,8 +135,8 @@ public static class FileManager
     {
 		string[] MUSICPATHS_WIN = new string[]
 		{
-			"D:/Unitykit/MusicData",
-			System.Environment.CurrentDirectory + "/MusicData"
+			System.Environment.CurrentDirectory + "/MusicData",
+			"D:/Unitykit/MusicData"	//DEBUG
 		};
 		string[] MUSICPATHS_ANDROID = new string[]
 		{
@@ -170,8 +189,20 @@ public static class FileManager
 		#endif
 		Debug.Log("FileManager:Reading "+ _path);
 		WWW www = new WWW(_path);
+		//YieldToStop(www);
 		while (!www.isDone);
 		return www.bytes;
+	}
+	private static void YieldToStop(WWW www)
+	{
+		var @enum = DownloadEnumerator(www);
+		while (@enum.MoveNext()) ;
+	}
+	private static IEnumerator DownloadEnumerator(WWW www)
+	{
+		while (!www.isDone) ;
+
+		yield return www;
 	}
 	public static AudioClip ReadMp3WWW(string _path)
 	{

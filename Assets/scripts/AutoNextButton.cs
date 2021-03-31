@@ -24,22 +24,11 @@ public class AutoNextButton : MonoBehaviour
             m_Button.GetComponent<Image>().sprite = selected;
             if (MusicPlayer.GetSongLength()-MusicPlayer.GetAudioPosSec()<0.02f)
             {
-                int index = 0;
-                for (int i = 0; i < MusicWheelBase.GetWheelItemCount(); i++)
-                {
-                    if (MusicLoader.SongList[i].title == MusicPlayer.GetCurAudio())
-                    {
-                        index = i+1;
-                        break;
-                    }
-                }
+                int index = MusicWheelBase.GetCurSongIndex() +1;
                 if (index >= MusicWheelBase.GetWheelItemCount()) index = 0;
                 MusicWheelItem item = GameObject.Find("WheelItem" + string.Format("{0}", index)).GetComponent<MusicWheelItem>();
 
-                float t = index * 1.0f / (MusicWheelBase.GetWheelItemCount() - 1);
-                MusicWheelBase.UpdateWheelPos(t);
-                Scrollbar m_Scrollbar = GameObject.Find("Scrollbar").GetComponent<Scrollbar>();
-                m_Scrollbar.value = t;
+                MusicWheelBase.SetWheelPosIndex(index);
                 item.ButtonClicked();
                 GameObject.Find("SongProgressBar").GetComponent<SongProgressbar>().SetProgress(0f);
                 GameObject.Find("PlayButton").GetComponent<PlayButton>().ButtonOnClickEvent();

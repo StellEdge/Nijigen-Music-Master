@@ -31,7 +31,7 @@ public static class MusicLoader
 		if (!Directory.Exists(MUSICPATH))
 		{
 			MUSICPATH = MusicDataPath.MUSICPATH_ANDROID;
-		}*/
+		}
 		MUSICPATH = FileManager.GetMusicDataPath()+"/";
 		debugtext.Add("MyDebug", "MUSICPATH " + MUSICPATH);
 		Debug.Log("MUSICPATH " + MUSICPATH);
@@ -69,14 +69,65 @@ public static class MusicLoader
 					}
 				}
 			}
-		}
+		}*/
 
+		musicfolders = LoadSongDataFromDisk();
 		//csv load complete
 		MusicDirFilter(musicfolders, FolderFilter);
 
 		UpdateSongList(musicfolders);
 		//UpdateMusicManagerAudioDic(audioDic);
 
+	}
+	public static List<MusicFolder> LoadSongDataFromDisk()
+    {
+		MUSICPATH = FileManager.GetMusicDataPath() + "/";
+		debugtext.Add("MyDebug", "MUSICPATH " + MUSICPATH);
+		Debug.Log("MUSICPATH " + MUSICPATH);
+		List<MusicFolder> mf = new List<MusicFolder>();
+		MusicFolder temp_musicfolder;
+		MusicData temp_music = new MusicData();
+		//load music files
+		if (Directory.Exists(MUSICPATH))
+		{
+			musicdir = new DirectoryInfo(MUSICPATH);
+			DirectoryInfo[] musicsets = musicdir.GetDirectories();
+
+			for (int i = 0; i < musicsets.Length; i++)
+			{
+				if (File.Exists(MUSICPATH + musicsets[i].Name + "/data.csv"))
+				{
+					// good pack?
+					Debug.Log("Found pack csv:" + musicsets[i].Name);
+					//temp_musicfolder.musicdata.Clear();
+					try
+					{
+						csvController.GetInstance().loadFile(MUSICPATH + musicsets[i].Name, "data.csv");
+						List<string[]> musiclist = csvController.GetInstance().getData();
+						musiclist.RemoveAt(0);
+						temp_musicfolder = new MusicFolder();
+						temp_musicfolder.Name = musicsets[i].Name;
+						temp_musicfolder.musicdata.Clear();
+						foreach (string[] info in musiclist)
+						{
+							//temp_music.SetMusicData(info);
+							info[6] = MUSICPATH + musicsets[i].Name + "//" + info[6];
+							info[7] = MUSICPATH + musicsets[i].Name + "//" + info[7];
+							MusicData md = new MusicData(info);
+							md.packname = musicsets[i].Name;
+							temp_musicfolder.musicdata.Add(md);
+						}
+						Debug.Log("Loaded pack csv:" + musicsets[i].Name);
+						mf.Add(temp_musicfolder);
+					}
+					catch
+					{
+						Debug.Log(musicsets[i].Name + "load failed!");
+					}
+				}
+			}
+		}
+		return mf;
 	}
 	public static string[] GetFolderFilter()
     {
@@ -87,32 +138,30 @@ public static class MusicLoader
 		MusicPlayer.UpdateAudioDic(d);
 
     }
-	public static void UpdateSongList(List<MusicFolder> mfolders)
-	{
-		//Get music folders from MusicLoader
-		//List<Thread> threads = new List<Thread>();
-		//Thread t;
+	public static List<MusicData> ConvertMusicFoldersToMusicData(List<MusicFolder> mfolders)
+    {
 		SongList = new List<MusicData>();
-
-		
 		foreach (MusicFolder mf in mfolders)
 		{
 			ReadAndLoadMusicFolderToAudioDic(mf);
-			foreach (MusicData md in mf.musicdata){
+			foreach (MusicData md in mf.musicdata)
+			{
 				SongList.Add(md);
 			}
 		}
-
-		/*
-		foreach (MusicFolder mf in mfolders)
-		{
-            t = new Thread(ReadAndLoadMusicFolder);
-			t.Start(mf);
-			foreach (MusicData md in mf.musicdata){
-				SongList.Add(md);
-			}
-		}*/
+		return SongList;
+	}
+	public static void UpdateSongList(List<MusicFolder> mfolders)
+	{
+		DeleteWheelItems();
+		SongList = ConvertMusicFoldersToMusicData(mfolders);
 		SongList = Shuffle<MusicData>(SongList);
+		CreateWheelItems(SongList);
+	}
+	public static void UpdateSongList(List<MusicData> mdatas)
+	{
+		DeleteWheelItems();
+		SongList = Shuffle<MusicData>(mdatas);
 		CreateWheelItems(SongList);
 	}
 	private static void ReadAndLoadMusicFolderAsync(object obj)
@@ -248,9 +297,11 @@ public static class MusicLoader
 			ColorBlock cb = new ColorBlock();
 
 			cb = temp.button.colors;
-			cb.highlightedColor = new Color(255 / 255f, 255 / 255f, 255 / 255f, 0 / 255f);
-			cb.pressedColor = new Color(125 / 255f, 255 / 255f, 255 / 255f, 20 / 255f);
-			cb.selectedColor = new Color(125 / 255f, 255 / 255f, 255 / 255f, 10 / 255f);
+			cb.normalColor= new Color(255 / 255f, 255 / 255f, 255 / 255f, 120 / 255f);
+			cb.highlightedColor = new Color(0 / 255f, 255 / 255f, 255 / 255f, 20 / 255f);
+			cb.pressedColor = new Color(0 / 255f, 255 / 255f, 255 / 255f, 20 / 255f);
+			cb.selectedColor = new Color(0 / 255f, 255 / 255f, 255 / 255f, 10 / 255f);
+			cb.fadeDuration = 0.5f;
 			temp.button.colors = cb;
 
 			temp.text_title = new GameObject();

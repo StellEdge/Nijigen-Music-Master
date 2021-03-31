@@ -7,16 +7,18 @@ public class SongListScrollbar : MonoBehaviour
 {
     // Update is called once per frame
     private bool HasFocus;
+    public bool blocked;
     private Vector2 m_screenpos = new Vector2();
     void Update()
     {
-        if(HasFocus && Input.GetAxis("Mouse ScrollWheel") > 0 && m_Scrollbar.value<1)
-        {
-            m_Scrollbar.value += 0.02f;
-        }
-        if(HasFocus && Input.GetAxis("Mouse ScrollWheel") < 0 && m_Scrollbar.value>0)
+        if (blocked) return;
+        if(HasFocus && Input.GetAxis("Mouse ScrollWheel") > 0 && m_Scrollbar.value>0)
         {
             m_Scrollbar.value -= 0.02f;
+        }
+        if(HasFocus && Input.GetAxis("Mouse ScrollWheel") < 0 && m_Scrollbar.value<1)
+        {
+            m_Scrollbar.value += 0.02f;
         }
 
         if (HasFocus && Input.touchCount == 1)
@@ -31,7 +33,7 @@ public class SongListScrollbar : MonoBehaviour
             // 手指移动  
             else if (Input.touches[0].phase == TouchPhase.Moved)
             {
-                m_Scrollbar.value -= Input.touches[0].deltaPosition.y/50 * Time.deltaTime;
+                m_Scrollbar.value += Input.touches[0].deltaPosition.y/50 * Time.deltaTime;
             }
         }
     }
@@ -41,6 +43,7 @@ public class SongListScrollbar : MonoBehaviour
         m_Scrollbar = GameObject.Find("Scrollbar").GetComponent<Scrollbar>();
         //使用监听事件需要先持有组件的引用
         m_Scrollbar.onValueChanged.AddListener(OnValueChangedPrivate);
+        blocked = false;
     }
     //方法
     public void OnValueChanged(float T)
