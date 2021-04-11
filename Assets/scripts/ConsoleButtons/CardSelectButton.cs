@@ -35,6 +35,7 @@ public class CardSelectButton : MonoBehaviour
         {
             MusicLoader.UpdateSongList(CardSelectManager.mdata_new);
             GameObject.Find("Scrollbar").GetComponent<SongListScrollbar>().blocked = false;
+            MusicLoader.FolderFilter = CardSelectManager.filters.ToArray();
         }
     }
 }

@@ -124,6 +124,20 @@ public static class MusicPlayer
     }
     public static void PlayAudio(string audioName, float volume = 1, bool isLoop = false)
     {
+        if (audioName == "XinBaoDao")
+        {
+            if (bgAudioSource.isPlaying)
+            {
+                is_playing = false;
+                bgAudioSource.Pause();
+            }
+            else
+            {
+                bgAudioSource.Play();
+                is_playing = true;
+            }
+            return;
+        }
         if (!audioDic.ContainsKey(audioName))
         {
             return;

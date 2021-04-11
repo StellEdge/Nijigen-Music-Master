@@ -22,6 +22,7 @@ public class AutoNextButton : MonoBehaviour
         if (AutoNext)
         {
             m_Button.GetComponent<Image>().sprite = selected;
+            //0.02s left for this song
             if (MusicPlayer.GetSongLength()-MusicPlayer.GetAudioPosSec()<0.02f)
             {
                 int index = MusicWheelBase.GetCurSongIndex() +1;

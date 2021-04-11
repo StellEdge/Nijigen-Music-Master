@@ -18,7 +18,8 @@ public class CardSelectItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.localPosition = new Vector3(-400+112*(index % 8), -(index/8) * 160 + GameObject.Find("CardListScroll").GetComponent<Scrollbar>().value * (CardSelectManager.CardNum - 1)/8 * 160, -1);
+        int card_per_line = 8;
+        gameObject.transform.localPosition = new Vector3(-400+112*(index % card_per_line), -(index/ card_per_line) * 160 + GameObject.Find("CardListScroll").GetComponent<Scrollbar>().value * (CardSelectManager.CardNum - 1)/ card_per_line * 160, -1);
     }
     public void ButtonOnClickEvent()
     {

@@ -13,7 +13,10 @@ public class RandomNext : MonoBehaviour
     }
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            ButtonOnClickEvent();
+        }
     }
     public void ButtonOnClickEvent()
     {

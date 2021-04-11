@@ -20,6 +20,16 @@ public class LanguageManager
 		string res = string.Format("{0:D2}:{1:D2}:{2:D2}", th, tm, ts);
 		return res;
 	}
+	public static string ConvToTimeMili(float s)
+	{
+		int t = Mathf.FloorToInt(s);
+		int th = t / 3600;
+		int tm = (t - th * 3600) / 60;
+		int ts = t - th * 3600 - tm * 60;
+		int tms = Mathf.FloorToInt(s * 1000) % 1000;
+		string res = string.Format("{0:D2}:{1:D2}:{2:D3}", tm, ts, tms);
+		return res;
+	}
 }
 
 public class MusicWheelBase
@@ -106,6 +116,24 @@ public class MusicFolder{
 }
 public static class FileManager
 {
+	public static string GetThumbnailPath(string s)
+    {
+		//MusicLoader.SongList[index].image
+		string[] path_split = s.Split('/');
+		var index = path_split[path_split.Length - 1].LastIndexOf('.');
+		string filename = path_split[path_split.Length - 1].Substring(0, index);
+
+
+		// string filename = path_split[path_split.Length - 1].Split('.')[0];
+		string res = "";
+		for(int i = 0; i < path_split.Length - 1; i++)
+        {
+			res +=path_split[i]+"/";
+        }
+		res += "thumbnails/";
+		res += filename+".jpg";
+		return res;
+	}
 	public static string GetAndroidMusicDataFilesDir()
 	{
 		string[] potentialDirectories = new string[]
@@ -130,7 +158,6 @@ public static class FileManager
 		}
 		return "";
 	}
-
 	public static string GetMusicDataPath()
     {
 		string[] MUSICPATHS_WIN = new string[]
@@ -166,7 +193,6 @@ public static class FileManager
 			
 		return "";
 	}
-
 	public static byte[] ReadBytesSystemIO(string path)
     {
 		//在这里做文件读取

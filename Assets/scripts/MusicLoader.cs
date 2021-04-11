@@ -19,58 +19,10 @@ public static class MusicLoader
 	public static List<MusicData> SongList;
 
 	private static object audioWavDic_lock = new object();
-	private static string[] FolderFilter = { "Dark","CoreSet" };
+	public static string[] FolderFilter = { "Dark","CoreSet","Muse","Vocaloid","Touhou" };
 
 	public static void InitMusicLoader()
 	{
-		/*
-		if (!Directory.Exists(MUSICPATH))
-		{
-			MUSICPATH = MusicDataPath.MUSICPATH_DEBUG;
-		}
-		if (!Directory.Exists(MUSICPATH))
-		{
-			MUSICPATH = MusicDataPath.MUSICPATH_ANDROID;
-		}
-		MUSICPATH = FileManager.GetMusicDataPath()+"/";
-		debugtext.Add("MyDebug", "MUSICPATH " + MUSICPATH);
-		Debug.Log("MUSICPATH " + MUSICPATH);
-		musicfolders = new List<MusicFolder>();
-		MusicFolder temp_musicfolder;
-		MusicData temp_music = new MusicData();
-		//load music files
-		if (Directory.Exists(MUSICPATH)){  
-			musicdir = new DirectoryInfo(MUSICPATH);  
-			DirectoryInfo[] musicsets = musicdir.GetDirectories();
-
-			for(int i=0;i<musicsets.Length;i++){
-				if(File.Exists(MUSICPATH+musicsets[i].Name+"/data.csv")){
-					// good pack?
-					Debug.Log( "Found pack csv:" + musicsets[i].Name ); 
-					//temp_musicfolder.musicdata.Clear();
-					try{
-						csvController.GetInstance().loadFile(MUSICPATH+musicsets[i].Name,"data.csv");
-						List<string[]> musiclist=csvController.GetInstance().getData();
-						musiclist.RemoveAt(0);
-						temp_musicfolder = new MusicFolder();
-						temp_musicfolder.Name = musicsets[i].Name;
-						temp_musicfolder.musicdata.Clear();
-						foreach(string[] info in musiclist){
-							//temp_music.SetMusicData(info);
-							info[6] = MUSICPATH + musicsets[i].Name + "//" + info[6];
-							info[7] = MUSICPATH + musicsets[i].Name + "//" + info[7];
-							temp_musicfolder.musicdata.Add(new MusicData(info));
-						}	
-						Debug.Log( "Loaded pack csv:" + musicsets[i].Name ); 
-						musicfolders.Add(temp_musicfolder);
-					}
-					catch{
-						Debug.Log( musicsets[i].Name+ "load failed!");
-					}
-				}
-			}
-		}*/
-
 		musicfolders = LoadSongDataFromDisk();
 		//csv load complete
 		MusicDirFilter(musicfolders, FolderFilter);
@@ -111,8 +63,8 @@ public static class MusicLoader
 						foreach (string[] info in musiclist)
 						{
 							//temp_music.SetMusicData(info);
-							info[6] = MUSICPATH + musicsets[i].Name + "//" + info[6];
-							info[7] = MUSICPATH + musicsets[i].Name + "//" + info[7];
+							info[6] = MUSICPATH + musicsets[i].Name + "/" + info[6];
+							info[7] = MUSICPATH + musicsets[i].Name + "/" + info[7];
 							MusicData md = new MusicData(info);
 							md.packname = musicsets[i].Name;
 							temp_musicfolder.musicdata.Add(md);
@@ -281,12 +233,12 @@ public static class MusicLoader
 
 			temp.button_obj = new GameObject();
 			temp.button_obj.transform.parent = musicwheelitem.transform;
-			temp.button_obj.transform.localPosition = new Vector3(20f, 0, 0f);
+			temp.button_obj.transform.localPosition = new Vector3(19f, 0, 0f);
 			temp.button = temp.button_obj.AddComponent<Button>();
 
 			//background image for item;
 			temp.image = temp.button_obj.AddComponent<Image>();
-			temp.image.GetComponent<RectTransform>().sizeDelta = new Vector2(40f, 6f);
+			temp.image.GetComponent<RectTransform>().sizeDelta = new Vector2(38f, 6f);
 			temp.image.color = new Color(255 / 255f, 255 / 255f, 255 / 255f, 125 / 255f);
 
 			//temp.button.GetComponent<RectTransform>().sizeDelta = new Vector2(40f, 6f);
@@ -337,8 +289,8 @@ public static class MusicLoader
 			temp.text_animation_tm.fontSize = 16;
 			temp.text_animation_tm.anchor = TextAnchor.UpperRight;
 
-			temp.text_translated.transform.localPosition = new Vector3(38, 3, 0);
-			temp.text_translated_tm.fontSize = 20;
+			temp.text_translated.transform.localPosition = new Vector3(38f, 2.6f, 0f);
+			temp.text_translated_tm.fontSize = 16;
 			temp.text_translated_tm.anchor = TextAnchor.UpperRight;
 
 			musicwheelitem.layer = LayerMask.NameToLayer("UI");

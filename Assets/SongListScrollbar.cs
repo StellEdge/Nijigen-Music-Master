@@ -12,13 +12,22 @@ public class SongListScrollbar : MonoBehaviour
     void Update()
     {
         if (blocked) return;
+        if(m_Scrollbar.value < 0 )
+        {
+            m_Scrollbar.value = 0;
+        }
+        if(m_Scrollbar.value >1)
+        {
+            m_Scrollbar.value = 1;
+        }
+
         if(HasFocus && Input.GetAxis("Mouse ScrollWheel") > 0 && m_Scrollbar.value>0)
         {
-            m_Scrollbar.value -= 0.02f;
+            m_Scrollbar.value -= 0.02f * 150f/(MusicWheelBase.GetWheelItemCount()+1);
         }
         if(HasFocus && Input.GetAxis("Mouse ScrollWheel") < 0 && m_Scrollbar.value<1)
         {
-            m_Scrollbar.value += 0.02f;
+            m_Scrollbar.value += 0.02f * 150f / (MusicWheelBase.GetWheelItemCount() + 1);
         }
 
         if (HasFocus && Input.touchCount == 1)
@@ -33,7 +42,7 @@ public class SongListScrollbar : MonoBehaviour
             // 手指移动  
             else if (Input.touches[0].phase == TouchPhase.Moved)
             {
-                m_Scrollbar.value += Input.touches[0].deltaPosition.y/50 * Time.deltaTime;
+                m_Scrollbar.value += Input.touches[0].deltaPosition.y/50 * Time.deltaTime * 150f / (MusicWheelBase.GetWheelItemCount() + 1);
             }
         }
     }

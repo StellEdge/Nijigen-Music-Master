@@ -7,6 +7,7 @@ public class PlayButton : MonoBehaviour
     // Start is called before the first frame update
     private Button m_Button;
     private Sprite play, pause;
+    //private bool keystate;
     void Start()
     {
         m_Button = gameObject.GetComponent<Button>();
@@ -24,6 +25,12 @@ public class PlayButton : MonoBehaviour
         {
             m_Button.GetComponent<Image>().sprite = play;
         }
+        //bool curkey = Input.GetKey(KeyCode.Space);
+        if (Input.GetKeyDown(KeyCode.C))//!keystate && curkey)
+        {
+            ButtonOnClickEvent();
+        }
+        //keystate = curkey;
     }
     public void ButtonOnClickEvent()
     {
@@ -35,6 +42,7 @@ public class PlayButton : MonoBehaviour
         else
         {
             Debug.Log("UnPaused");
+            //MusicPlayer.ResumeAudio();
             MusicPlayer.PlayAudio(MusicPlayer.GetCurAudio());
         }
         //

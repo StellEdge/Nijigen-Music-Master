@@ -71,12 +71,14 @@
     <Compile Include="Assets\scripts\CardListScroll.cs" />
     <Compile Include="Assets\scripts\CardSelectItem.cs" />
     <Compile Include="Assets\scripts\ConsoleButtons\CardSelectButton.cs" />
+    <Compile Include="Assets\scripts\ConsoleButtons\CurSongButton.cs" />
     <Compile Include="Assets\scripts\ConsoleButtons\NextButton.cs" />
     <Compile Include="Assets\scripts\ConsoleButtons\PrevButton.cs" />
     <Compile Include="Assets\scripts\ConsoleButtons\ReloadButton.cs" />
     <Compile Include="Assets\scripts\ConsoleButtons\XinBaoDaoButton.cs" />
     <Compile Include="Assets\scripts\CurrentFolders.cs" />
     <Compile Include="Assets\scripts\FullAutoButton.cs" />
+    <Compile Include="Assets\scripts\GuessTimer.cs" />
     <Compile Include="Assets\scripts\LimitTVSize.cs" />
     <Compile Include="Assets\scripts\MusicData.cs" />
     <Compile Include="Assets\scripts\MusicLoader.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Assets\scripts\ScrollingY.cs" />
     <Compile Include="Assets\scripts\SongProgressbar.cs" />
     <Compile Include="Assets\scripts\SongSelect\CardSelectManager.cs" />
+    <Compile Include="Assets\scripts\SongSelect\SongFolderFilterToogle.cs" />
     <Compile Include="Assets\scripts\SongTimer.cs" />
     <Compile Include="Assets\scripts\SongVolumebar.cs" />
     <Compile Include="Assets\scripts\Spectrum.cs" />

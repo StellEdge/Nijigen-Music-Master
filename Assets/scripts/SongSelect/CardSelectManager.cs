@@ -6,14 +6,21 @@ public class CardSelectManager
 {
     public static List<MusicData> mdata;
 	public static List<MusicData> mdata_new;
+	public static List<MusicFolder> mfdata;
+	public static List<string> filters;
 	public static int CardNum;
     public static void InitCardSelector()
     {
-        mdata = MusicLoader.ConvertMusicFoldersToMusicData( MusicLoader.LoadSongDataFromDisk());
+		mfdata = MusicLoader.LoadSongDataFromDisk();
+		mdata = MusicLoader.ConvertMusicFoldersToMusicData(mfdata);
 		mdata_new = new List<MusicData>();
+		filters = new List<string>();
 		CardNum = mdata.Count;
+		GameObject.Find("TotalCards").GetComponent<Text>().text = "CurrentSelected:" + mdata_new.Count;
 		DestroyCardList();
 		CreateCardList();
+		DestroyToogleList();
+		CreateToggleList();
 	}
 
     public static void DestroyCardList()
@@ -55,13 +62,13 @@ public class CardSelectManager
 
 			
 			temp.rImage = cardSelectItem.AddComponent<RawImage>();
-			byte[] bytes = FileManager.ReadBytesWWW(MusicLoader.SongList[index].image);
+			byte[] bytes = FileManager.ReadBytesWWW(FileManager.GetThumbnailPath(MusicLoader.SongList[index].image));
 
 			//创建Texture
 			Texture2D texture = new Texture2D(0, 0);
 			texture.LoadImage(bytes);
 			int area = texture.width * texture.height;
-			float max_area = 5.7f * 8.8f *0.04f;
+			float max_area = 6.75f * 10.5f *0.035f;
 			float ratio = (float)(System.Math.Sqrt(max_area * 1.0f / area));
 			temp.rImage.texture = texture;
 			temp.rImage.GetComponent<RectTransform>().sizeDelta = new Vector2(texture.width * ratio, texture.height * ratio);
@@ -153,6 +160,74 @@ public class CardSelectManager
 			index++;
 		}
 	}
+
+	public static void DestroyToogleList()
+	{
+		GameObject tglist = GameObject.Find("CSToggleList");
+		for (int i = 0; i < tglist.transform.childCount; i++)
+		{
+			Transform child = tglist.transform.GetChild(i);
+			GameObject.Destroy(child.gameObject);
+		}
+		return;
+	}
+	public static void CreateToggleList()
+    {
+		GameObject tglist = GameObject.Find("CSToggleList");
+		int index = 0;
+		foreach (MusicFolder mf in mfdata)
+        {
+			GameObject tgItem = new GameObject("CStoggleItem" + string.Format("{0}", index));
+
+			SongFolderFilterToogle temp = tgItem.AddComponent<SongFolderFilterToogle>();
+			Toggle tg = tgItem.AddComponent<Toggle>();
+
+			temp.toggle1 = tg;
+			temp.setname = mf.Name;
+
+			tgItem.transform.SetParent(tglist.transform);
+
+			tgItem.transform.localPosition = new Vector3(390f, 265f-20f*index, 0f);
+			tgItem.GetComponent<RectTransform>().sizeDelta = new Vector2(160, 20);
+			tgItem.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+			GameObject textItem = new GameObject("CStoggleItem" + string.Format("{0}", index) + "text");
+			textItem.transform.SetParent(tgItem.transform);
+			textItem.transform.localPosition = new Vector3(32f, -1f, 0f);
+			Text textItem_text = textItem.AddComponent<Text>();
+			textItem_text.text =LanguageManager.UTF8String (mf.Name);
+			textItem_text.font = (Font)Resources.Load("chaoshijicufanghei");
+			textItem_text.alignment = TextAnchor.MiddleLeft;
+			textItem.GetComponent<RectTransform>().sizeDelta = new Vector2(160, 20);
+			textItem.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+			GameObject bgItem = new GameObject("CStoggleItem" + string.Format("{0}", index)+"bg");
+			bgItem.transform.SetParent(tgItem.transform);
+			bgItem.transform.localPosition = new Vector3(-60f, 0f, 0f);
+			Image bgimg = bgItem.AddComponent<Image>();
+			bgimg.sprite = Resources.Load<Sprite>("bg");
+			bgItem.GetComponent<RectTransform>().sizeDelta = new Vector2(20, 20);
+			bgItem.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+			GameObject checkmark = new GameObject("CStoggleItem" + string.Format("{0}", index) + "cm");
+			checkmark.transform.SetParent(bgItem.transform);
+			Image cmimg = checkmark.AddComponent<Image>();
+			cmimg.sprite = Resources.Load<Sprite>("cm");
+			checkmark.transform.localPosition = new Vector3(0f, 0f, 0f);
+			checkmark.GetComponent<RectTransform>().sizeDelta = new Vector2(20, 20);
+			checkmark.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+			temp.toggle1.targetGraphic = bgimg;
+			temp.toggle1.graphic = cmimg;
+
+			temp.toggle1.onValueChanged.AddListener(delegate
+			{
+				temp.ToggleCallValueChanged(temp.toggle1);
+			});
+			index++;
+			//mf.Name;
+		}
+	}
     public static void AddCard(MusicData md)
     {
         for(int i = 0; i < mdata_new.Count; i++)
@@ -160,6 +235,7 @@ public class CardSelectManager
             if (mdata_new[i].title == md.title) return;
         }
 		mdata_new.Add(md);
+		GameObject.Find("TotalCards").GetComponent<Text>().text = "CurrentSelected:" + mdata_new.Count;
     }
     public static void RemoveCard(MusicData md)
     {
@@ -168,10 +244,33 @@ public class CardSelectManager
             if (mdata_new[i].title == md.title)
             {
 				mdata_new.RemoveAt(i);
-                return;
+				GameObject.Find("TotalCards").GetComponent<Text>().text = "CurrentSelected:" + mdata_new.Count;
+				return;
             }
         }
-    }
+		
+	}
+
+	public static void AddFilter(string name)
+    {
+		for (int i = 0; i < filters.Count; i++)
+		{
+			if (filters[i] == name) return;
+		}
+		filters.Add(name);
+	}
+
+	public static void RemoveFilter(string name)
+	{
+		for (int i = 0; i < filters.Count; i++)
+		{
+			if (filters[i] == name)
+			{
+				filters.RemoveAt(i);
+				return;
+			}
+		}
+	}
 }
 
 public class CardWheelBase
