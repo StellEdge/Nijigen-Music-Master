@@ -21,9 +21,46 @@ public class CardSelectManager
 		CreateCardList();
 		DestroyToogleList();
 		CreateToggleList();
+		//InitCardListToCurrentList();
 	}
+	public static void InitCardListToCurrentList()
+	{
+		GameObject songlist = GameObject.FindGameObjectWithTag("CardList");
+		List<MusicData> cur_list = MusicLoader.SongList;
+        if (true)//(cur_list.Count < mdata.Count * 0.8)
+        {
+			for (int i = 0; i < cur_list.Count; i++)
+			{
 
-    public static void DestroyCardList()
+				int cur_ind = -1;
+				for (int j = 0; j < mdata.Count; j++)
+                {
+					if (cur_list[i] == mdata[j])
+                    {
+						cur_ind = j;
+						break;
+					}
+                }
+				if (cur_ind != -1)
+				{
+					Debug.Log("Find a pre listed item: "+mdata[cur_ind].title);
+					GameObject card_item = GameObject.Find("CardWheelItem" + string.Format("{0}", cur_ind));
+
+					Debug.Log("Add :" + CardSelectManager.mdata[cur_ind].title);
+					AddCard(CardSelectManager.mdata[cur_ind]);
+					card_item.GetComponent<CardSelectItem>().rImage.color = Color.cyan;
+					foreach (Transform child in card_item.transform)
+					{
+						child.gameObject.GetComponent<Text>().color = Color.cyan;
+					}
+					card_item.GetComponent<CardSelectItem>().state = true;
+				}
+			}
+		}
+
+		return;
+	}
+	public static void DestroyCardList()
     {
 		GameObject songlist = GameObject.FindGameObjectWithTag("CardList");
 		for (int i = 0; i < songlist.transform.childCount; i++)
@@ -42,7 +79,7 @@ public class CardSelectManager
 			GameObject cardSelectItem = new GameObject("CardWheelItem" + string.Format("{0}", index));
 
 			CardSelectItem temp = cardSelectItem.AddComponent<CardSelectItem>();
-
+			temp.state = false;
 
 			cardSelectItem.transform.parent = cardList.transform;
 			
@@ -62,7 +99,7 @@ public class CardSelectManager
 
 			
 			temp.rImage = cardSelectItem.AddComponent<RawImage>();
-			byte[] bytes = FileManager.ReadBytesWWW(FileManager.GetThumbnailPath(MusicLoader.SongList[index].image));
+			byte[] bytes = FileManager.ReadBytesWWW(FileManager.GetThumbnailPath(md.image));
 
 			//创建Texture
 			Texture2D texture = new Texture2D(0, 0);
@@ -86,76 +123,6 @@ public class CardSelectManager
 			cb.selectedColor = new Color(255 / 255f, 255 / 255f, 255 / 255f, 255 / 255f);
 			cb.fadeDuration = 0.4f;
 			temp.m_Button.colors = cb;
-			/*
-			temp.button_obj = new GameObject();
-			temp.button_obj.transform.parent = cardSelectItem.transform;
-			temp.button_obj.transform.localPosition = new Vector3(20f, 0, 0f);
-			temp.button = temp.button_obj.AddComponent<Button>();
-
-			//background image for item;
-			temp.image = temp.button_obj.AddComponent<Image>();
-			temp.image.GetComponent<RectTransform>().sizeDelta = new Vector2(40f, 6f);
-			temp.image.color = new Color(255 / 255f, 255 / 255f, 255 / 255f, 125 / 255f);
-
-			//temp.button.GetComponent<RectTransform>().sizeDelta = new Vector2(40f, 6f);
-			temp.button.targetGraphic = temp.image;
-			temp.button.onClick.RemoveAllListeners();
-			temp.button.onClick.AddListener(temp.ButtonClicked);
-
-			ColorBlock cb = new ColorBlock();
-
-			cb = temp.button.colors;
-			cb.normalColor = new Color(255 / 255f, 255 / 255f, 255 / 255f, 120 / 255f);
-			cb.highlightedColor = new Color(0 / 255f, 255 / 255f, 255 / 255f, 20 / 255f);
-			cb.pressedColor = new Color(0 / 255f, 255 / 255f, 255 / 255f, 20 / 255f);
-			cb.selectedColor = new Color(0 / 255f, 255 / 255f, 255 / 255f, 10 / 255f);
-			cb.fadeDuration = 0.5f;
-			temp.button.colors = cb;
-
-			temp.text_title = new GameObject();
-			temp.text_title.transform.parent = cardSelectItem.transform;
-			temp.text_title_tm = temp.text_title.AddComponent<TextMesh>();
-
-			temp.text_artist = new GameObject();
-			temp.text_artist.transform.parent = cardSelectItem.transform;
-			temp.text_artist_tm = temp.text_artist.AddComponent<TextMesh>();
-
-			temp.text_animation = new GameObject();
-			temp.text_animation.transform.parent = cardSelectItem.transform;
-			temp.text_animation_tm = temp.text_animation.AddComponent<TextMesh>();
-
-			temp.text_translated = new GameObject();
-			temp.text_translated.transform.parent = cardSelectItem.transform;
-			temp.text_translated_tm = temp.text_translated.AddComponent<TextMesh>();
-
-			temp.transform.localScale = new Vector3(8f, 8f, 8f);
-			temp.transform.localPosition = new Vector3(-160, -20 + index * 50, -1);
-			temp.text_title_tm.text = LanguageManager.UTF8String(md.title);
-			temp.text_artist_tm.text = LanguageManager.UTF8String(md.artist);
-			temp.text_animation_tm.text = LanguageManager.UTF8String(md.animation);
-			temp.text_translated_tm.text = LanguageManager.UTF8String(md.translated);
-
-			temp.text_title.transform.localPosition = new Vector3(0, 2.8f, 0);
-			temp.text_title_tm.fontSize = 24;
-
-			temp.text_artist.transform.localPosition = new Vector3(0, -1f, 0);
-			temp.text_artist_tm.fontSize = 12;
-
-			temp.text_animation.transform.localPosition = new Vector3(38, -0.8f, 0);
-			temp.text_animation_tm.fontSize = 16;
-			temp.text_animation_tm.anchor = TextAnchor.UpperRight;
-
-			temp.text_translated.transform.localPosition = new Vector3(38, 3, 0);
-			temp.text_translated_tm.fontSize = 20;
-			temp.text_translated_tm.anchor = TextAnchor.UpperRight;
-			
-			cardSelectItem.layer = LayerMask.NameToLayer("UI");
-			foreach (Transform tran in cardSelectItem.GetComponentsInChildren<Transform>())
-			{//遍历当前物体及其所有子物体
-				tran.gameObject.layer = LayerMask.NameToLayer("UI");//更改物体的Layer层
-			}
-			//temp.button_obj.transform.gameObject.layer = LayerMask.NameToLayer("Background");
-			*/
 			temp.index = index;
 			index++;
 		}
@@ -187,18 +154,18 @@ public class CardSelectManager
 
 			tgItem.transform.SetParent(tglist.transform);
 
-			tgItem.transform.localPosition = new Vector3(390f, 265f-20f*index, 0f);
-			tgItem.GetComponent<RectTransform>().sizeDelta = new Vector2(160, 20);
+			tgItem.transform.localPosition = new Vector3(400f- 120f * (index / 2), 265f-22f*(index%2), 0f);
+			tgItem.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
 			tgItem.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
 
 			GameObject textItem = new GameObject("CStoggleItem" + string.Format("{0}", index) + "text");
 			textItem.transform.SetParent(tgItem.transform);
-			textItem.transform.localPosition = new Vector3(32f, -1f, 0f);
+			textItem.transform.localPosition = new Vector3(0f, -1f, 0f);
 			Text textItem_text = textItem.AddComponent<Text>();
 			textItem_text.text =LanguageManager.UTF8String (mf.Name);
 			textItem_text.font = (Font)Resources.Load("chaoshijicufanghei");
 			textItem_text.alignment = TextAnchor.MiddleLeft;
-			textItem.GetComponent<RectTransform>().sizeDelta = new Vector2(160, 20);
+			textItem.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 20);
 			textItem.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
 
 			GameObject bgItem = new GameObject("CStoggleItem" + string.Format("{0}", index)+"bg");
@@ -250,7 +217,50 @@ public class CardSelectManager
         }
 		
 	}
+	public static void RemoveAllCard()
+	{
+		mdata_new = new List<MusicData>();
+		GameObject.Find("TotalCards").GetComponent<Text>().text = "CurrentSelected:" + mdata_new.Count;
+		GameObject songlist = GameObject.FindGameObjectWithTag("CardList");
+		for (int i = 0; i < songlist.transform.childCount; i++)
+		{
+			Transform child = songlist.transform.GetChild(i);
+			if (child.gameObject.GetComponent<CardSelectItem>().state)
+			{
+				child.gameObject.GetComponent<CardSelectItem>().ButtonOnClickEvent();
+			}
+		}
+		return;
+	}
 
+	public static void AddAllCardOfFolder(string foldername)
+    {
+		for(int i = 0; i < mdata.Count; i++)
+        {
+			if(mdata[i].packname == foldername)
+            {
+				CardSelectItem card_item = GameObject.Find("CardWheelItem" + string.Format("{0}", i)).GetComponent<CardSelectItem>();
+                if (!card_item.state)
+                {
+					card_item.ButtonOnClickEvent();
+                }
+			}
+		}
+	}
+	public static void RemoveAllCardOfFolder(string foldername)
+	{
+		for (int i = 0; i < mdata.Count; i++)
+		{
+			if (mdata[i].packname == foldername)
+			{
+				CardSelectItem card_item = GameObject.Find("CardWheelItem" + string.Format("{0}", i)).GetComponent<CardSelectItem>();
+				if (card_item.state)
+				{
+					card_item.ButtonOnClickEvent();
+				}
+			}
+		}
+	}
 	public static void AddFilter(string name)
     {
 		for (int i = 0; i < filters.Count; i++)

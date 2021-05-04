@@ -13,7 +13,7 @@ public class CurrentFolders : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.GetComponent<Text>().text = "CurrentPacks:";
+        gameObject.GetComponent<Text>().text = "CurrentSongs:"+MusicWheelBase.GetWheelItemCount()+ " CurrentPacks:";
         foreach (string s in MusicLoader.GetFolderFilter())
         {
             gameObject.GetComponent<Text>().text = gameObject.GetComponent<Text>().text+s+" ";

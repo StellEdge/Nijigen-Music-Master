@@ -105,6 +105,15 @@ public class MusicData{
 		image = info[7];
 		//packname = info[8];
 	}
+	public static bool operator ==(MusicData a, MusicData b)
+	{
+		//部分匹配比较
+		return a.NO == b.NO && a.title == b.title && a.animation==b.animation;
+	}
+	public static bool operator !=(MusicData a, MusicData b)
+	{
+		return !(a == b);
+	}
 }
 public class MusicFolder{
 	public List<MusicData> musicdata;

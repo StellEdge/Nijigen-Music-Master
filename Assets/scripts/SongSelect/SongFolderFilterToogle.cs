@@ -18,10 +18,12 @@ public class SongFolderFilterToogle : MonoBehaviour
         if (toggle.isOn)
         {
             CardSelectManager.AddFilter(setname);
+            CardSelectManager.AddAllCardOfFolder(setname);
         }
         else
         {
             CardSelectManager.RemoveFilter(setname);
+            CardSelectManager.RemoveAllCardOfFolder(setname);
         }
     }
 

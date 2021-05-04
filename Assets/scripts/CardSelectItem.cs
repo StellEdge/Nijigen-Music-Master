@@ -8,11 +8,11 @@ public class CardSelectItem : MonoBehaviour
     public Button m_Button;
 
     public int index;
-    private bool state;
+    public bool state = false;
     // Start is called before the first frame update
     void Start()
     {
-        state = false;
+
     }
 
     // Update is called once per frame

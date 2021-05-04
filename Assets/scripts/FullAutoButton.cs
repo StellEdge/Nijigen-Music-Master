@@ -10,6 +10,9 @@ public class FullAutoButton : MonoBehaviour
     private Sprite selected, normal;
     private float timer;
     private float volume;
+    public float max_time = 30f;
+    public float fade_time = 5f;
+    bool fading = false;
     void Start()
     {
         FullAuto = false;
@@ -24,25 +27,62 @@ public class FullAutoButton : MonoBehaviour
         if (FullAuto)
         {
             m_Button.GetComponent<Image>().sprite = selected;
+
+
             if (MusicPlayer.GetIsPlaying())
             {
                 timer += Time.deltaTime;
-                if (timer > 30f || MusicPlayer.GetSongLength() - MusicPlayer.GetAudioPosSec() < 0.02f)
+                if (timer > max_time || MusicPlayer.GetSongLength() - MusicPlayer.GetAudioPosSec() < 0.02f)
                 {
-                    timer = 0f;
-                    GameObject.Find("RandomNextButton").GetComponent<RandomNext>().ButtonOnClickEvent();
-                    MusicPlayer.SetVolume(volume);
-                    GameObject.Find("PlayButton").GetComponent<PlayButton>().ButtonOnClickEvent();
-                }
+                    List<int> itemlist = new List<int>();
+                    for (int i = 0; i < MusicWheelBase.GetWheelItemCount(); i++)
+                    {
+                        MusicWheelItem item_t = GameObject.Find("WheelItem" + string.Format("{0}", i)).GetComponent<MusicWheelItem>();
+                        if (!item_t.played)
+                        {
+                            itemlist.Add(i);
+                        }
+                    }
+                    if (itemlist.Count == 0)
+                    {
+                        //放完了
+                        timer = 0f;
+                        fading = false;
+                        MusicPlayer.SetVolume(GameObject.Find("SongVolumeBar").GetComponent<Scrollbar>().value);
+                        FullAuto = !FullAuto;
+                        GameObject.Find("PlayButton").GetComponent<PlayButton>().ButtonOnClickEvent();
+                    }
+                    else
+                    {
+                        timer = 0f;
+                        fading = false;
+                        GameObject.Find("RandomNextButton").GetComponent<RandomNext>().ButtonOnClickEvent();
+                        //MusicPlayer.SetVolume(volume);
+                        MusicPlayer.SetVolume(GameObject.Find("SongVolumeBar").GetComponent<Scrollbar>().value);
 
-                if (timer > 25f)
-                {
-                    MusicPlayer.SetVolume(volume * (30f - timer) / 5);
+                        //GameObject.Find("SongVolumeBar").GetComponent<Scrollbar>().value = volume;
+                        GameObject.Find("PlayButton").GetComponent<PlayButton>().ButtonOnClickEvent();
+                    }
+
                 }
+                if (!fading)
+                {
+                    //volume = MusicPlayer.GetVolume();
+                }
+                if (timer > max_time- fade_time)
+                {
+
+                    fading = true;
+
+                    //MusicPlayer.SetVolume(volume * (max_time - timer) / (max_time-fade_time));
+                    MusicPlayer.SetVolume(GameObject.Find("SongVolumeBar").GetComponent<Scrollbar>().value * (max_time - timer) / (max_time - fade_time));
+                    // GameObject.Find("SongVolumeBar").GetComponent<Scrollbar>().value = volume * (max_time - timer) / (max_time - fade_time);
+                }
+                /*
                 else
                 {
                     volume = MusicPlayer.GetVolume();
-                }
+                }*/
             }
             else
             {

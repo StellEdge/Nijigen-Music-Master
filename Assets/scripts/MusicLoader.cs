@@ -92,16 +92,16 @@ public static class MusicLoader
     }
 	public static List<MusicData> ConvertMusicFoldersToMusicData(List<MusicFolder> mfolders)
     {
-		SongList = new List<MusicData>();
+		List<MusicData> tempList = new List<MusicData>();
 		foreach (MusicFolder mf in mfolders)
 		{
-			ReadAndLoadMusicFolderToAudioDic(mf);
+			//ReadAndLoadMusicFolderToAudioDic(mf);
 			foreach (MusicData md in mf.musicdata)
 			{
-				SongList.Add(md);
+				tempList.Add(md);
 			}
 		}
-		return SongList;
+		return tempList;
 	}
 	public static void UpdateSongList(List<MusicFolder> mfolders)
 	{

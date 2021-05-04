@@ -34,6 +34,7 @@ public class RandomNext : MonoBehaviour
                 itemlist.Add(i);
             }
         }
+        if (itemlist.Count == 0) return;
         //Random.InitState(1);
         int index = Random.Range(0,itemlist.Count);
         GameObject.Find("RedoRandomButton").GetComponent<RedoRandom>().AddRandom(itemlist[index]);
@@ -50,6 +51,7 @@ public class RandomNext : MonoBehaviour
         {
             float songlen = MusicPlayer.GetSongLength();
             float sec = Random.Range(0f, 80f);
+            sec = Mathf.Min(songlen - 15f, sec);
             pos = sec / songlen;
         }
         
